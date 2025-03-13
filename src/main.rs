@@ -34,11 +34,11 @@ fn parse_isoname(full_isoname: String) -> i32
         println!("Product Family: \t\t{}",  (isoname_integer >> 16) & 0x1F);
         println!("ID Number: \t\t\t{}",  (isoname_integer) & 0xFFFF);
         
-        0
+        return 0;
     }
     else{
         println!("Error parsing {full_isoname} as an isoname!");
-        1
+        return 1;
     }
 }
 
