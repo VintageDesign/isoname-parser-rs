@@ -21,6 +21,11 @@ fn main() {
             valid_args = true;
             pack_isoname();
         }
+        else if args[1] == "--help" || args[1] == "-h"
+        {
+            valid_args = true;
+            print_help();
+        }
     }
 
     if !valid_args
