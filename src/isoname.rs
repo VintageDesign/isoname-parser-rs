@@ -15,7 +15,7 @@ impl IsoName{
 
     pub fn set_address_arb_capable(&mut self, value: u8)
     {
-        self.raw_value |= ((value as u64) << 63) & 0xA000000000000000; 
+        self.raw_value |= ((value as u64) << 63) & 0x8000000000000000; 
     }
 
     pub fn get_industry_group(&self) -> u8
@@ -65,7 +65,7 @@ impl IsoName{
 
     pub fn set_function_code_instance(&mut self, value: u8)
     {
-        self.raw_value |= ((value as u64) << 35) & 0x000000FA00000000; 
+        self.raw_value |= ((value as u64) << 35) & 0x000000F800000000; 
     }
 
     pub fn get_ecu_instance(&self) -> u8
@@ -112,7 +112,7 @@ use super::*;
 
 #[test]
 fn get_address_arb_works() {
-    let name = IsoName{raw_value: 0xa000000000000000};
+    let name = IsoName{raw_value: 0x8000000000000000};
     let result = name.get_address_arb_capable();
 
     assert_eq!(result, 1);
@@ -202,7 +202,7 @@ fn set_function_code_works() {
 
 #[test]
 fn get_function_code_instance_works() {
-    let name = IsoName{raw_value: 0x000000FA00000000};
+    let name = IsoName{raw_value: 0x000000F800000000};
     let result = name.get_function_code_instance();
 
     assert_eq!(result, 0x1F);
