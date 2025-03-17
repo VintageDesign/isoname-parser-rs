@@ -1,22 +1,35 @@
 use std::env;
 use std::process::exit;
+use text_io::read;
 
 mod isoname;
 
 fn main() {
     let args: Vec<String>= env::args().collect();
 
-    if args.len() == 2 && args[1].contains("0x")
+    let mut valid_args = false; 
+    let mut return_code = 1;
+    if args.len() == 2
     {
-        exit(parse_isoname(args[1].clone()))
+        if args[1].contains("0x")
+        {
+            valid_args = true;
+            return_code = parse_isoname(args[1].clone());
+        }
+        else if args[1] == "--pack-name" || args[1] == "-p"
+        {
+            valid_args = true;
+            pack_isoname();
+        }
     }
-    else
+
+    if !valid_args
     {
         println!("Invalid Arguments!");
         print_help();
     }
 
-    exit(1)
+    exit(return_code)
 }
 
 
@@ -43,6 +56,51 @@ fn parse_isoname(full_isoname: String) -> i32
     }
 }
 
+fn pack_isoname()
+{
+        let mut name = isoname::IsoName::new(0);
+
+        print!("Address Arbitration Capable: ");
+        let address_arb_capable: u8 = read!();
+        name.set_address_arb_capable(address_arb_capable);
+
+        print!("Industry Group: ");
+        let industry_group: u8 = read!();
+        name.set_industry_group(industry_group);
+
+        print!("Vehicle System (Device Class) Instance: ");
+        let vehicle_system_instance: u8 = read!();
+        name.set_vehicle_system_instance(vehicle_system_instance);
+
+        print!("Vehicle System (Device Class): ");
+        let vehicle_system: u8 = read!();
+        name.set_vehicle_system(vehicle_system);
+
+        print!("Function Code: ");
+        let function_code: u8 = read!();
+        name.set_function_code(function_code);
+
+        print!("Function Code Instance: ");
+        let function_code_instance: u8 = read!();
+        name.set_function_code_instance(function_code_instance);
+
+        print!("ECU Instance: ");
+        let ecu_instance: u8 = read!();
+        name.set_ecu_instance(ecu_instance);
+
+        print!("Manufacturer Code: ");
+        let mc_code: u16 = read!();
+        name.set_mc_code(mc_code);
+        
+        print!("Serial Number: ");
+        let serial: u32 = read!();
+        name.set_serial(serial);
+
+        println!("Isoname: 0x{:X}", name.get_raw_value());
+}
+
 fn print_help(){
-    println!(r"Usage: isoname-parser 0x[64-bit hex number]");
+    println!(r"Usage: isoname-parser [0x<64-bit hex number>] [options]
+Possible Options:
+    --pack-name|-p  Packs the ISOName based on the individual fields");
 }
