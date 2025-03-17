@@ -1,6 +1,7 @@
 use std::env;
 use std::process::exit;
 
+mod isoname;
 
 fn main() {
     let args: Vec<String>= env::args().collect();
@@ -23,16 +24,16 @@ fn parse_isoname(full_isoname: String) -> i32
 {
     if let Ok(isoname_integer) = u64::from_str_radix(full_isoname.trim_start_matches("0x"), 16)
     {
-        println!("Address Arbitration Capable: \t{}",  isoname_integer >> 63);
-        println!("Industry Group: \t\t{}",  (isoname_integer >> 60) & 0x007);
-        println!("Vehicle System Instance: \t{}",  (isoname_integer >> 56) & 0x00F);
-        println!("Vehicle System (Device Class): \t{}",  (isoname_integer >> 49) & 0x007F);
-        println!("Function Code: \t\t\t{}",  (isoname_integer >> 40) & 0x00FF);
-        println!("Function Instance: \t\t{}",  (isoname_integer >> 35) & 0x001F);
-        println!("ECU Instance: \t\t\t{}",  (isoname_integer >> 32) & 0x007);
-        println!("MC Code: \t\t\t{}",  (isoname_integer >> 21) & 0x7FF);
-        println!("Product Family: \t\t{}",  (isoname_integer >> 16) & 0x1F);
-        println!("ID Number: \t\t\t{}",  (isoname_integer) & 0xFFFF);
+        let name = isoname::IsoName::new(isoname_integer);
+        println!("Address Arbitration Capable: \t{}",  name.get_address_arb_capable());
+        println!("Industry Group: \t\t{}",  name.get_industry_group());
+        println!("Vehicle System Instance: \t{}",  name.get_vehicle_system_instance());
+        println!("Vehicle System (Device Class): \t{}",  name.get_vehicle_system());
+        println!("Function Code: \t\t\t{}",  name.get_function_code());
+        println!("Function Instance: \t\t{}",  name.get_function_code_instance());
+        println!("ECU Instance: \t\t\t{}",  name.get_ecu_instance());
+        println!("MC Code: \t\t\t{}",  name.get_mc_code());
+        println!("Serial: \t\t\t{}", name.get_serial());
         
         return 0;
     }

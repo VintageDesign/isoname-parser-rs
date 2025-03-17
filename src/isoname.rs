@@ -5,6 +5,9 @@ pub struct IsoName{
 }
 
 impl IsoName{
+    pub fn new(value: u64) -> Self {
+        return Self{raw_value: value};
+    }
     pub fn get_address_arb_capable(&self) -> u8
     {
         return (self.raw_value >> 63) as u8;
